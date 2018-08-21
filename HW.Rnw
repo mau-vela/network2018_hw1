@@ -1,0 +1,248 @@
+\documentclass[12pt, letterpaper, notitlepage, onecolumn, twoside, openbib]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{mathrsfs}
+\usepackage{verbatim}
+\usepackage{float}
+\usepackage{turnstile}
+\usepackage{epsf,graphicx,psfrag}
+\usepackage{rotating, graphicx}
+\usepackage{lscape}
+\usepackage{latexsym}
+\usepackage{epstopdf}
+\usepackage{setspace}
+\usepackage[top=1in, bottom=1in, right=1in, left=1in]{geometry}
+\usepackage{dcolumn}
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage{threeparttable}
+\usepackage[labelsep=period,font={bf},textfont={normalsize},labelfont={normalsize}]{caption}
+
+
+\newcolumntype{.}{D{.}{.}{-1}}      % Allows alignment of decimal places
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+%\usepackage[style=authoryear]{biblatex}
+\usepackage[authoryear,round,longnamesfirst]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{apalike}
+
+\doublespacing
+
+%\bibliography{biblioperu}
+\usepackage{url}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\cfoot{ - page \thepage}
+\renewcommand{\headrulewidth}{0pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+
+
+<<include=FALSE>>=
+library(sna)
+library(igraph)
+library(network)
+library(intergraph)
+library(statnet)
+library(caret)
+library(PRROC)
+library(statnet)
+library(btergm)
+library(xergm)
+rm(list=ls())
+
+opts_chunk$set(
+concordance=TRUE
+)
+
+setwd('C:/Users/nande/Dropbox/Social Network/Curso Wustl/HW/network2018_hw1')
+
+@
+
+\begin{document}
+
+
+\title{Homework}
+
+\date{ }
+
+\maketitle
+
+
+<<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE>>=
+load('nigeria.rda')
+
+years = sort(unique(nigeria$year))
+groups = with(nigeria, intersect(sender, receiver))
+n = length(groups)
+adjmat = matrix(0,nrow = n, ncol = n, dimnames = list(groups, groups))
+
+nigerialist = lapply(years, function(t) {
+  slice = nigeria[nigeria$year==t,]
+  positivecases = slice[slice$conflict==1,]
+  for(i in 1:nrow(positivecases)){
+    sender= as.character(positivecases$sender[i])
+    receiver= as.character(positivecases$receiver[i])
+    adjmat[sender, receiver]=1
+  }
+  return(as.network.matrix(adjmat))
+})
+names(nigerialist) <- years
+@
+  
+<<include=FALSE>>=  
+nigeriaDyn = networkDynamic(network.list=nigerialist)
+deg_total <- vector("character", length(years))
+deg_in_total <- vector("character", length(years))
+deg_out_total <- vector("character", length(years))
+labels <- network.vertex.names(nigeriaDyn)
+labels <- gsub("\nMilitia", "", labels)
+labels <- gsub("\n\\(Nigeria\\)", "", labels)
+deg_all <- sna::degree(nigeriaDyn)
+@
+
+<<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE, fig.height=4, out.width = '110%' >>=
+par(mfrow = c(1,2))
+for (i in 1:length(years)) {
+  g <- nigerialist[[i]]
+  g1 <- asIgraph(g)
+  deg <- degree(g1, mode="all")
+  V(g1)$size <- deg*4
+  dist <- ((-1.4)*(V(g1)$size-min(V(g1)$size)))/(max(V(g1)$size)-min(V(g1)$size))+1.4
+  plot(g1, edge.arrow.size=.08, edge.arrow.width=0.8, edge.curved=.05, edge.color="black", 
+     vertex.label=labels, vertex.label.color="black", 
+     vertex.label.dist=dist, vertex.label.cex = .3, vertex.color="grey", 
+     main=years[i],layout=layout_with_kk)
+  if ((i %% 2) == 0) par(mfrow = c(1,2))
+  
+  #degree
+  deg_total[i] <- paste(groups[which( deg == max(deg) )], collapse = ' ')
+  deg_total[i] <- gsub("\nMilitia", "", deg_total[i])
+  deg_total[i] <- gsub("\n\\(Nigeria\\)", "", deg_total[i])
+  #degree in 
+  deg_in <- degree(g1, mode="in")
+  deg_in_total[i] <- paste(groups[which( deg_in == max(deg_in) )], collapse = ' ')
+  deg_in_total[i] <- gsub("\nMilitia", "", deg_in_total[i])
+  deg_in_total[i] <- gsub("\n\\(Nigeria\\)", "", deg_in_total[i])
+  #degree out
+  deg_out <- degree(g1, mode="out")
+  deg_out_total[i] <- paste(groups[which( deg_out == max(deg_out) )], collapse = ' ')
+  deg_out_total[i] <- gsub("\nMilitia", "", deg_out_total[i])
+  deg_out_total[i] <- gsub("\n\\(Nigeria\\)", "", deg_out_total[i])
+}
+
+
+plot(nigeriaDyn, label = labels, main="All", label.cex=0.5, mode="circle", vertex.cex=log(deg_all)+1,
+     label.col="black", vertex.col="grey", edge.col="black")
+@
+
+
+In the graphs the size of the nodes is based on the global degree and in  most of years the actor with higher degree is the military or the police. By the degree it is clear that Police is the actor more influential, and only the Fulani Militia seems equal influential according to the out-degree measure. Degree seems the best measurment giving that interaction is based on attacks. However if we look at eigenvector centrality still the Police would be the most influential actor. 
+
+Degree seems to be the best way to measure influence when looking year by year as there are many isolated nodes which makes distances or eigenvector centrality less usefull in this case. As seen bellow only in 2001, 2007, 2011 and 2014 the Police or the Military were not the most influential actors. By looking at the in-degree or the receiver, it seems that most of the time the Police was the most influential in most years. Looking at the out-degree the military was the most influential actor.
+
+<<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE>>=
+#Degree
+deg_all <- sna::degree(nigeriaDyn)
+paste(groups[which( deg_all == max(deg_all) )], collapse = ' ')
+deg_in_all <- sna::degree(nigeriaDyn, cmode="indegree")
+paste(groups[which( deg_in_all == max(deg_in_all) )], collapse = ' ')
+deg_out_all <- sna::degree(nigeriaDyn, cmode="outdegree")
+paste(groups[which( deg_out_all == max(deg_out_all) )], collapse = ' ')
+
+#Eigenvector centrality
+eigen <- sna::evcent(nigeriaDyn)
+paste(groups[which( eigen == max(eigen) )], collapse = ' ')
+
+
+#Degree year by year
+as.data.frame(cbind(years, "Higher Degree (all)"=deg_total))
+as.data.frame(cbind(years, "Higher Degree (in)"=deg_in_total))
+as.data.frame(cbind(years, "HigherDegree (out)"=deg_out_total))
+@
+
+
+As seen bellow, k=3 seems to be the best number of groups according to both the AUC (PR) and AUC(ROC).
+
+<<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE>>=
+set.seed(1234)
+
+cross <- function(data, f=10, k=2) {
+    eclusts <- equiv.clust(data)
+    BlockM <- blockmodel(data, eclusts, k=k)
+    member_or <- BlockM$block.membership[BlockM$order.vec]
+    set.seed(1234)
+    folds <- createFolds(groups, k=f, returnTrain = T)
+    tot_pr <- c()
+    tot_roc <- c()
+    for (i in 1:f) {
+        nigeriaDyn2 <- data
+        network::delete.vertices(nigeriaDyn2,(1:n)[-folds[[i]]])
+        eclusts <- equiv.clust(nigeriaDyn2)
+        BlockM <- blockmodel(nigeriaDyn2, eclusts, k=k)
+        member <- BlockM$block.membership[BlockM$order.vec]
+        
+        nigeriaDyn2%v%"member" <- member
+        m <- btergm(nigeriaDyn2 <- edge+nodecov('member'))
+        edgeprob(m)
+        
+        
+        
+        tot_pr <- c(tot_pr, pr.curve( member_or[folds[[i]]], member)$auc.integral)
+        tot_roc <- c(tot_pr, roc.curve( member_or[folds[[i]]], member)$auc.integral)
+        
+        
+    }
+    return(list(PR=mean(tot_pr), ROC=mean(tot_roc)))
+}
+
+
+pr_results <- c()
+roc_results <- c()
+for (k in 2:10) {
+  cross_results <- cross(nigeriaDyn, k=k)
+  pr_results <- c(pr_results, cross_results$PR)
+  roc_results <- c(roc_results, cross_results$ROC)
+}
+data.frame(k=2:10,PR=pr_results, ROC=roc_results)
+@
+
+<<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE, fig.height=5, out.width = '110%' >>=
+eclusts <- equiv.clust(nigeriaDyn)
+BlockM <- blockmodel(nigeriaDyn, eclusts, k=3)
+member_or <- BlockM$block.membership[BlockM$order.vec]
+
+nigeriaDyn%v%"member" <- member_or
+#nigeriaDyn %v% "member"
+nigeriaDyn %v% "col" <- c("gray70", "tomato", "gold")[nigeriaDyn %v% "member"]
+
+plot(nigeriaDyn, label = labels, label.cex=0.5, mode="circle", vertex.cex=log(deg_all)+1,
+     label.col="black", vertex.col="col", vertex.border="col", edge.col="black")
+@
+
+The first logical hypothesis would be that if a reciprocal tie is present then the odds of a tie would be higher. If an actor attacks, the odd of a retaliation should be higher. For this, it is important to include the term mutual in the ERGM. Including an attribute variable of whether the actor is the Police or the Military may be another important variable to include. It should be expected no attacks between them. Another hypothesis could be that the more an actor has 2 stars the more likely that actor would attack others. This may be important given that two popular actors are in consideration, the police and the military. If two actors attack another third, it should be more likely for them not to attack themselves. For this, it is included the term triangles. And we may discount each additional tie by including the term gwidegree.
+
+As expected the coefficient for mutual is positive so it is very likely retaliation among actors. The strong negative coefficient for the group-homophily term shows that the police and the military do not attack themselves. The triangle couldn't be estimated because there are few triangles in this network. 
+
+
+<<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE>>=
+nigeria1 <- nigerialist[[1]]
+nigeria1%v%"gov" <- ifelse(groups=="Police\n(Nigeria)"| groups=="Military\n(Nigeria)",1,0)
+m = ergm(nigeria1 ~ edges + mutual+ nodematch("gov") + istar(2)+ triangle+gwidegree(decay = 0.5, fixed = TRUE))
+summary(m)
+@
+
+Bellow it is shown the MCM diagnostics, it seems well-mixed and with stationary chains. 
+
+<<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE>>=
+mcmc.diagnostics(m)
+@
+
+
+
+
+\end{document}
