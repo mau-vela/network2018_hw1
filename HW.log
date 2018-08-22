@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.6.16)  21 AUG 2018 13:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.6.16)  21 AUG 2018 21:21
 entering extended mode
 **./HW.tex
 (HW.tex
@@ -876,43 +876,31 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [10]
-Overfull \hbox (36.59523pt too wide) in paragraph at lines 325--325
-[]        []\OT1/cmtt/m/n/12 tot_pr[] []<-[] []c[][](tot_pr,[] []pr.curve[][]( 
-member_or[folds[[i]]], member)[][]$[][]auc.integral)[][] 
+Underfull \vbox (badness 10000) detected at line 359
  []
 
 
-Overfull \hbox (48.94524pt too wide) in paragraph at lines 326--326
-[]        []\OT1/cmtt/m/n/12 tot_roc[] []<-[] []c[][](tot_pr,[] []roc.curve[][]
-( member_or[folds[[i]]], member)[][]$[][]auc.integral)[][] 
- []
-
-
-Underfull \vbox (badness 10000) detected at line 355
- []
-
-
-Underfull \vbox (badness 10000) detected at line 355
+Underfull \vbox (badness 10000) detected at line 359
  []
 
 [11]
-Package color Info: Redefining color shadecolor on input line 359.
+Package color Info: Redefining color shadecolor on input line 363.
 
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 367--367
+Overfull \hbox (228.02032pt too wide) in paragraph at lines 371--371
 [][]\OT1/cmtt/m/n/12 nigeriaDyn[] []%v%[] []"col"[] []<-[] []c[][]([][]"gray70"
-[][],[] []"tomato"[][],[] []"gold"[][])[nigeriaDyn[] []%v%[] []"member"[][]][][
-] 
+[][],[] []"tomato"[][],[] []"gold"[][],[] []"yellow"[][],[] []"blue"[][],[] []"
+red"[][],[] []"orange"[][])[nigeriaDyn[] []%v%[] []"member"[][]][][] 
  []
 
 
-Overfull \hbox (79.82025pt too wide) in paragraph at lines 369--369
+Overfull \hbox (79.82025pt too wide) in paragraph at lines 373--373
 [][]\OT1/cmtt/m/n/12 plot[][](nigeriaDyn,[] []label[] []= labels,[] []label.cex
 [][]=[][]0.5[][],[] []mode[][]=[][]"circle"[][],[] []vertex.cex[][]=[][]log[][]
 (deg_all)[][]+[][]1[][],[][] 
  []
 
 
-Overfull \hbox (24.24522pt too wide) in paragraph at lines 370--370
+Overfull \hbox (24.24522pt too wide) in paragraph at lines 374--374
 []     []\OT1/cmtt/m/n/12 label.col[][]=[][]"black"[][],[] []vertex.col[][]=[][
 ]"col"[][],[] []vertex.border[][]=[][]"col"[][],[] []edge.col[][]=[][]"black"[]
 [])[][] 
@@ -928,17 +916,17 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 File: figure/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-7-1.pdf used on input line 373.
+Package pdftex.def Info: figure/unnamed-chunk-7-1.pdf used on input line 377.
 (pdftex.def)             Requested size: 516.73338pt x 369.10144pt.
 
-Overfull \hbox (64.60318pt too wide) in paragraph at lines 373--374
+Overfull \hbox (64.60318pt too wide) in paragraph at lines 377--378
 [][] 
  []
 
 [13 <./figure/unnamed-chunk-7-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 383.
+Package color Info: Redefining color shadecolor on input line 387.
 
-Overfull \hbox (85.64528pt too wide) in paragraph at lines 386--386
+Overfull \hbox (85.64528pt too wide) in paragraph at lines 390--390
 [][]\OT1/cmtt/m/n/12 nigeria1[][]%v%[][]"gov"[] []<-[] []ifelse[][](groups[][]=
 =[][]"Police\OMS/cmsy/m/n/12 n\OT1/cmtt/m/n/12 n(Nigeria)"[][]|[] []groups[][]=
 =[][]"Military\OMS/cmsy/m/n/12 n\OT1/cmtt/m/n/12 n(Nigeria)"[][],[][]1[][],[][]
@@ -946,7 +934,7 @@ Overfull \hbox (85.64528pt too wide) in paragraph at lines 386--386
  []
 
 
-Overfull \hbox (215.67032pt too wide) in paragraph at lines 387--387
+Overfull \hbox (215.67032pt too wide) in paragraph at lines 391--391
 [][]\OT1/cmtt/m/n/12 m[] []=[] []ergm[][](nigeria1[] []~[] []edges[] []+[] []mu
 tual[][]+[] []nodematch[][]([][]"gov"[][])[] []+[] []istar[][]([][]2[][])[][]+[
 ] []triangle[][]+[][]gwidegree[][]([][]decay[] []=[] []0.5[][],[] []fixed[] []=
@@ -954,7 +942,7 @@ tual[][]+[] []nodematch[][]([][]"gov"[][])[] []+[] []istar[][]([][]2[][])[][]+[
  []
 
 
-Overfull \hbox (36.59523pt too wide) in paragraph at lines 396--396
+Overfull \hbox (36.59523pt too wide) in paragraph at lines 400--400
 []\OT1/cmtt/m/n/12 ## Formula:   nigeria1 ~ edges + mutual + nodematch("gov") +
  istar(2) + triangle +[] 
  []
@@ -966,55 +954,13 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [14]
-Package color Info: Redefining color shadecolor on input line 426.
-
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 465--465
-[]\OT1/cmtt/m/n/12 ##                edges       mutual nodematch.gov        is
-tar2    gwidegree[] 
+Package color Info: Redefining color shadecolor on input line 430.
+ [15]
+Underfull \vbox (badness 10000) detected at line 501
  []
 
 
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 466--466
-[]\OT1/cmtt/m/n/12 ## Lag 0     1.00000000  1.000000000    1.00000000  1.000000
-e+00  1.000000000[] 
- []
-
-
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 467--467
-[]\OT1/cmtt/m/n/12 ## Lag 1024  0.07206654  0.126972968    0.02687274  8.049122
-e-02  0.046796963[] 
- []
-
-
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 468--468
-[]\OT1/cmtt/m/n/12 ## Lag 2048  0.01631024  0.033883995    0.02285306 -2.683274
-e-05  0.016064825[] 
- []
-
-
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 469--469
-[]\OT1/cmtt/m/n/12 ## Lag 3072 -0.01388164 -0.002715401   -0.01066121 -2.788065
-e-02 -0.004236398[] 
- []
-
-
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 470--470
-[]\OT1/cmtt/m/n/12 ## Lag 4096 -0.02763104 -0.030105981   -0.02546932 -3.530011
-e-02 -0.014735790[] 
- []
-
-
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 471--471
-[]\OT1/cmtt/m/n/12 ## Lag 5120 -0.01684109 -0.028573946   -0.01513682 -1.656373
-e-02 -0.013808677[] 
- []
-
-[15]
-Underfull \vbox (badness 10000) detected at line 487
- []
-
-
-Underfull \vbox (badness 10000) detected at line 487
+Underfull \vbox (badness 10000) detected at line 501
  []
 
 
@@ -1023,29 +969,33 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[16] <figure/unnamed-chunk-9-1.pdf, id=145, 505.89pt x 505.89pt>
-File: figure/unnamed-chunk-9-1.pdf Graphic file (type pdf)
-
-<use figure/unnamed-chunk-9-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-9-1.pdf used on input line 488.
-(pdftex.def)             Requested size: 469.75502pt x 469.76265pt.
-
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 488--489
-[][] 
+[16]
+Underfull \vbox (badness 10000) detected at line 501
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 10000) detected at line 501
+ []
 
- [17]
+[17] <figure/unnamed-chunk-9-1.pdf, id=149, 505.89pt x 505.89pt>
+File: figure/unnamed-chunk-9-1.pdf Graphic file (type pdf)
+
+<use figure/unnamed-chunk-9-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-9-1.pdf used on input line 502.
+(pdftex.def)             Requested size: 469.75502pt x 469.76265pt.
+
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 502--503
+[][] 
+ []
+
 <figure/unnamed-chunk-9-2.pdf, id=150, 505.89pt x 505.89pt>
 File: figure/unnamed-chunk-9-2.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-9-2.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-9-2.pdf used on input line 490.
+Package pdftex.def Info: figure/unnamed-chunk-9-2.pdf used on input line 504.
 (pdftex.def)             Requested size: 469.75502pt x 469.76265pt.
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 490--491
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 504--505
 [][] 
  []
 
@@ -1060,7 +1010,7 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [18 <./figure/unnamed-chunk-9-1.pdf>]
-Overfull \hbox (1957.02118pt too wide) in paragraph at lines 493--493
+Overfull \hbox (1957.02118pt too wide) in paragraph at lines 507--507
 []\OT1/cmtt/m/n/12 ## MCMC diagnostics shown here are from the last round of si
 mulation, prior to computation of final parameter estimates. Because the final 
 estimates are refinements of those used for this simulation run, these diagnost
@@ -1069,15 +1019,15 @@ ics may understate model performance. To directly assess the performance of the
 ect, GOF=~model).[] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 501.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 515.
 [19 <./figure/unnamed-chunk-9-2.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 501.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 515.
  (HW.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 501.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 501.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 515.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 515.
 Package rerunfilecheck Info: File `HW.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 501.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 515.
  ) 
 Here is how much of TeX's memory you used:
  9407 strings out of 493323
@@ -1093,7 +1043,7 @@ ublic/amsfonts/cm/cmr12.pfb><C:/Users/nande/AppData/Local/Programs/MiKTeX 2.9/f
 onts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/nande/AppData/Local/Programs/
 MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/nande/AppData/Lo
 cal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on HW.pdf (19 pages, 361275 bytes).
+Output written on HW.pdf (19 pages, 365018 bytes).
 PDF statistics:
  195 PDF objects out of 1000 (max. 8388607)
  20 named destinations out of 1000 (max. 500000)

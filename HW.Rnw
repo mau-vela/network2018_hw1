@@ -166,15 +166,12 @@ as.data.frame(cbind(years, "HigherDegree (out)"=deg_out_total))
 @
 
 
-As seen bellow, k=3 seems to be the best number of groups according to both the AUC (PR) and AUC(ROC).
+As seen bellow, k=7 seems to be the best number of groups according to both the AUC (PR) and AUC(ROC).
 
 <<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE>>=
 set.seed(1234)
 
 cross <- function(data, f=10, k=2) {
-    eclusts <- equiv.clust(data)
-    BlockM <- blockmodel(data, eclusts, k=k)
-    member_or <- BlockM$block.membership[BlockM$order.vec]
     set.seed(1234)
     folds <- createFolds(groups, k=f, returnTrain = T)
     tot_pr <- c()
@@ -187,14 +184,15 @@ cross <- function(data, f=10, k=2) {
         member <- BlockM$block.membership[BlockM$order.vec]
         
         nigeriaDyn2%v%"member" <- member
-        m <- btergm(nigeriaDyn2 <- edge+nodecov('member'))
-        edgeprob(m)
-        
-        
-        
-        tot_pr <- c(tot_pr, pr.curve( member_or[folds[[i]]], member)$auc.integral)
-        tot_roc <- c(tot_pr, roc.curve( member_or[folds[[i]]], member)$auc.integral)
-        
+        m <- btergm(as.network.networkDynamic(nigeriaDyn2) ~ edges + 
+                             gwesp(.5, fixed = TRUE) + nodecov("member"))
+        #probs <- edgeprob(m)
+
+        g <- gof(m, statistics = rocpr, nsim = 50)
+        tot_pr <- c(tot_pr, g$`Tie prediction`$auc.roc)
+        tot_roc <- c(tot_pr, g$`Tie prediction`$auc.pr)
+
+
         
     }
     return(list(PR=mean(tot_pr), ROC=mean(tot_roc)))
@@ -213,12 +211,12 @@ data.frame(k=2:10,PR=pr_results, ROC=roc_results)
 
 <<echo=TRUE, message=FALSE, warning=FALSE,  eval=TRUE, fig.height=5, out.width = '110%' >>=
 eclusts <- equiv.clust(nigeriaDyn)
-BlockM <- blockmodel(nigeriaDyn, eclusts, k=3)
+BlockM <- blockmodel(nigeriaDyn, eclusts, k=7)
 member_or <- BlockM$block.membership[BlockM$order.vec]
 
 nigeriaDyn%v%"member" <- member_or
 #nigeriaDyn %v% "member"
-nigeriaDyn %v% "col" <- c("gray70", "tomato", "gold")[nigeriaDyn %v% "member"]
+nigeriaDyn %v% "col" <- c("gray70", "tomato", "gold", "yellow", "blue", "red", "orange")[nigeriaDyn %v% "member"]
 
 plot(nigeriaDyn, label = labels, label.cex=0.5, mode="circle", vertex.cex=log(deg_all)+1,
      label.col="black", vertex.col="col", vertex.border="col", edge.col="black")

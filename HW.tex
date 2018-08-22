@@ -300,7 +300,7 @@ Degree seems to be the best way to measure influence when looking year by year a
 \end{knitrout}
 
 
-As seen bellow, k=3 seems to be the best number of groups according to both the AUC (PR) and AUC(ROC).
+As seen bellow, k=7 seems to be the best number of groups according to both the AUC (PR) and AUC(ROC).
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -308,9 +308,6 @@ As seen bellow, k=3 seems to be the best number of groups according to both the 
 \hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{)}
 
 \hlstd{cross} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{f}\hlstd{=}\hlnum{10}\hlstd{,} \hlkwc{k}\hlstd{=}\hlnum{2}\hlstd{) \{}
-    \hlstd{eclusts} \hlkwb{<-} \hlkwd{equiv.clust}\hlstd{(data)}
-    \hlstd{BlockM} \hlkwb{<-} \hlkwd{blockmodel}\hlstd{(data, eclusts,} \hlkwc{k}\hlstd{=k)}
-    \hlstd{member_or} \hlkwb{<-} \hlstd{BlockM}\hlopt{$}\hlstd{block.membership[BlockM}\hlopt{$}\hlstd{order.vec]}
     \hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{)}
     \hlstd{folds} \hlkwb{<-} \hlkwd{createFolds}\hlstd{(groups,} \hlkwc{k}\hlstd{=f,} \hlkwc{returnTrain} \hlstd{= T)}
     \hlstd{tot_pr} \hlkwb{<-} \hlkwd{c}\hlstd{()}
@@ -322,8 +319,15 @@ As seen bellow, k=3 seems to be the best number of groups according to both the 
         \hlstd{BlockM} \hlkwb{<-} \hlkwd{blockmodel}\hlstd{(nigeriaDyn2, eclusts,} \hlkwc{k}\hlstd{=k)}
         \hlstd{member} \hlkwb{<-} \hlstd{BlockM}\hlopt{$}\hlstd{block.membership[BlockM}\hlopt{$}\hlstd{order.vec]}
 
-        \hlstd{tot_pr} \hlkwb{<-} \hlkwd{c}\hlstd{(tot_pr,} \hlkwd{pr.curve}\hlstd{( member_or[folds[[i]]], member)}\hlopt{$}\hlstd{auc.integral)}
-        \hlstd{tot_roc} \hlkwb{<-} \hlkwd{c}\hlstd{(tot_pr,} \hlkwd{roc.curve}\hlstd{( member_or[folds[[i]]], member)}\hlopt{$}\hlstd{auc.integral)}
+        \hlstd{nigeriaDyn2}\hlopt{%v%}\hlstr{"member"} \hlkwb{<-} \hlstd{member}
+        \hlstd{m} \hlkwb{<-} \hlkwd{btergm}\hlstd{(}\hlkwd{as.network.networkDynamic}\hlstd{(nigeriaDyn2)} \hlopt{~} \hlstd{edges} \hlopt{+}
+                             \hlkwd{gwesp}\hlstd{(}\hlnum{.5}\hlstd{,} \hlkwc{fixed} \hlstd{=} \hlnum{TRUE}\hlstd{)} \hlopt{+} \hlkwd{nodecov}\hlstd{(}\hlstr{"member"}\hlstd{))}
+        \hlcom{#probs <- edgeprob(m)}
+
+        \hlstd{g} \hlkwb{<-} \hlkwd{gof}\hlstd{(m,} \hlkwc{statistics} \hlstd{= rocpr,} \hlkwc{nsim} \hlstd{=} \hlnum{50}\hlstd{)}
+        \hlstd{tot_pr} \hlkwb{<-} \hlkwd{c}\hlstd{(tot_pr, g}\hlopt{$}\hlstd{`Tie prediction`}\hlopt{$}\hlstd{auc.roc)}
+        \hlstd{tot_roc} \hlkwb{<-} \hlkwd{c}\hlstd{(tot_pr, g}\hlopt{$}\hlstd{`Tie prediction`}\hlopt{$}\hlstd{auc.pr)}
+
 
 
     \hlstd{\}}
@@ -342,15 +346,15 @@ As seen bellow, k=3 seems to be the best number of groups according to both the 
 \end{alltt}
 \begin{verbatim}
 ##    k        PR       ROC
-## 1  2 0.4940981 0.4940981
-## 2  3 0.5046866 0.5046866
-## 3  4 0.4930574 0.4930574
-## 4  5 0.4757369 0.4757369
-## 5  6 0.4750518 0.4750518
-## 6  7 0.4904888 0.4904888
-## 7  8 0.4954614 0.4954614
-## 8  9 0.4953397 0.4953397
-## 9 10 0.5025631 0.5025631
+## 1  2 0.5235649 0.4809065
+## 2  3 0.5371697 0.4923879
+## 3  4 0.5502108 0.5044855
+## 4  5 0.5399445 0.4963676
+## 5  6 0.5561239 0.5117770
+## 6  7 0.5787657 0.5327670
+## 7  8 0.5518961 0.5065237
+## 8  9 0.5367710 0.4937206
+## 9 10 0.5307155 0.4878298
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -359,12 +363,12 @@ As seen bellow, k=3 seems to be the best number of groups according to both the 
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{eclusts} \hlkwb{<-} \hlkwd{equiv.clust}\hlstd{(nigeriaDyn)}
-\hlstd{BlockM} \hlkwb{<-} \hlkwd{blockmodel}\hlstd{(nigeriaDyn, eclusts,} \hlkwc{k}\hlstd{=}\hlnum{3}\hlstd{)}
+\hlstd{BlockM} \hlkwb{<-} \hlkwd{blockmodel}\hlstd{(nigeriaDyn, eclusts,} \hlkwc{k}\hlstd{=}\hlnum{7}\hlstd{)}
 \hlstd{member_or} \hlkwb{<-} \hlstd{BlockM}\hlopt{$}\hlstd{block.membership[BlockM}\hlopt{$}\hlstd{order.vec]}
 
 \hlstd{nigeriaDyn}\hlopt{%v%}\hlstr{"member"} \hlkwb{<-} \hlstd{member_or}
 \hlcom{#nigeriaDyn %v% "member"}
-\hlstd{nigeriaDyn} \hlopt{%v%} \hlstr{"col"} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"gray70"}\hlstd{,} \hlstr{"tomato"}\hlstd{,} \hlstr{"gold"}\hlstd{)[nigeriaDyn} \hlopt{%v%} \hlstr{"member"}\hlstd{]}
+\hlstd{nigeriaDyn} \hlopt{%v%} \hlstr{"col"} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"gray70"}\hlstd{,} \hlstr{"tomato"}\hlstd{,} \hlstr{"gold"}\hlstd{,} \hlstr{"yellow"}\hlstd{,} \hlstr{"blue"}\hlstd{,} \hlstr{"red"}\hlstd{,} \hlstr{"orange"}\hlstd{)[nigeriaDyn} \hlopt{%v%} \hlstr{"member"}\hlstd{]}
 
 \hlkwd{plot}\hlstd{(nigeriaDyn,} \hlkwc{label} \hlstd{= labels,} \hlkwc{label.cex}\hlstd{=}\hlnum{0.5}\hlstd{,} \hlkwc{mode}\hlstd{=}\hlstr{"circle"}\hlstd{,} \hlkwc{vertex.cex}\hlstd{=}\hlkwd{log}\hlstd{(deg_all)}\hlopt{+}\hlnum{1}\hlstd{,}
      \hlkwc{label.col}\hlstd{=}\hlstr{"black"}\hlstd{,} \hlkwc{vertex.col}\hlstd{=}\hlstr{"col"}\hlstd{,} \hlkwc{vertex.border}\hlstd{=}\hlstr{"col"}\hlstd{,} \hlkwc{edge.col}\hlstd{=}\hlstr{"black"}\hlstd{)}
@@ -399,13 +403,13 @@ As expected the coefficient for mutual is positive so it is very likely retaliat
 ## Iterations:  2 out of 20 
 ## 
 ## Monte Carlo MLE Results:
-##                Estimate Std. Error MCMC % p-value    
-## edges         -0.004633   2.665354      0  0.9986    
-## mutual         2.299057   1.196665      0  0.0549 .  
-## nodematch.gov -1.127850   0.505145      0  0.0257 *  
-## istar2        -0.703172   1.002197      0  0.4830    
-## triangle           -Inf   0.000000      0  <1e-04 ***
-## gwidegree     -4.718878   2.873098      0  0.1007    
+##               Estimate Std. Error MCMC % p-value    
+## edges          0.04503    2.62266      0  0.9863    
+## mutual         2.37950    1.11987      0  0.0338 *  
+## nodematch.gov -1.09842    0.47448      0  0.0208 *  
+## istar2        -0.73410    0.96313      0  0.4461    
+## triangle          -Inf    0.00000      0  <1e-04 ***
+## gwidegree     -4.80796    2.85555      0  0.0925 .  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -424,6 +428,9 @@ Bellow it is shown the MCM diagnostics, it seems well-mixed and with stationary 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{mcmc.diagnostics}\hlstd{(m)}
+\end{alltt}
 \begin{verbatim}
 ## Sample statistics summary:
 ## 
@@ -435,40 +442,47 @@ Bellow it is shown the MCM diagnostics, it seems well-mixed and with stationary 
 ## 1. Empirical mean and standard deviation for each variable,
 ##    plus standard error of the mean:
 ## 
-##                   Mean    SD Naive SE Time-series SE
-## edges         -0.85474 5.289  0.08264        0.08884
-## mutual         0.03882 1.129  0.01764        0.01868
-## nodematch.gov  0.63550 4.160  0.06500        0.06828
-## istar2        -2.19727 5.754  0.08991        0.09136
-## gwidegree      0.03342 3.321  0.05190        0.05439
+##                  Mean    SD Naive SE Time-series SE
+## edges          0.1099 5.627  0.08792        0.09474
+## mutual         0.2222 1.200  0.01875        0.02110
+## nodematch.gov  1.3191 4.415  0.06898        0.06898
+## istar2        -0.6309 6.537  0.10214        0.11122
+## gwidegree      0.3317 3.359  0.05248        0.05565
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##                  2.5%    25%     50%   75%  97.5%
-## edges         -10.000 -5.000 -1.0000 2.000 11.000
+## edges         -10.000 -4.000  0.0000 4.000 12.000
 ## mutual         -1.000 -1.000  0.0000 1.000  3.000
-## nodematch.gov  -6.000 -2.000  0.0000 3.000 10.000
-## istar2        -10.000 -7.000 -3.0000 1.000 11.000
-## gwidegree      -5.848 -2.396 -0.1423 2.178  6.957
+## nodematch.gov  -6.000 -2.000  1.0000 4.000 11.000
+## istar2        -10.000 -6.000 -2.0000 3.000 15.000
+## gwidegree      -5.848 -2.061  0.1548 2.571  7.168
 ## 
 ## 
 ## Sample statistics cross-correlations:
 ##                   edges    mutual nodematch.gov    istar2 gwidegree
-## edges         1.0000000 0.6348831     0.8448027 0.8327898 0.9445675
-## mutual        0.6348831 1.0000000     0.4207942 0.5473948 0.5903634
-## nodematch.gov 0.8448027 0.4207942     1.0000000 0.5959572 0.8533925
-## istar2        0.8327898 0.5473948     0.5959572 1.0000000 0.6144747
-## gwidegree     0.9445675 0.5903634     0.8533925 0.6144747 1.0000000
+## edges         1.0000000 0.6451016     0.8536075 0.8567962 0.9430548
+## mutual        0.6451016 1.0000000     0.4661134 0.5527570 0.6085496
+## nodematch.gov 0.8536075 0.4661134     1.0000000 0.6453335 0.8515740
+## istar2        0.8567962 0.5527570     0.6453335 1.0000000 0.6452543
+## gwidegree     0.9430548 0.6085496     0.8515740 0.6452543 1.0000000
 ## 
 ## Sample statistics auto-correlation:
 ## Chain 1 
-##                edges       mutual nodematch.gov        istar2    gwidegree
-## Lag 0     1.00000000  1.000000000    1.00000000  1.000000e+00  1.000000000
-## Lag 1024  0.07206654  0.126972968    0.02687274  8.049122e-02  0.046796963
-## Lag 2048  0.01631024  0.033883995    0.02285306 -2.683274e-05  0.016064825
-## Lag 3072 -0.01388164 -0.002715401   -0.01066121 -2.788065e-02 -0.004236398
-## Lag 4096 -0.02763104 -0.030105981   -0.02546932 -3.530011e-02 -0.014735790
-## Lag 5120 -0.01684109 -0.028573946   -0.01513682 -1.656373e-02 -0.013808677
+##                  edges       mutual nodematch.gov       istar2
+## Lag 0     1.0000000000  1.000000000    1.00000000  1.000000000
+## Lag 1024  0.0745023118  0.117637222    0.01497454  0.084838496
+## Lag 2048 -0.0016078931  0.012019314   -0.01324165 -0.000231895
+## Lag 3072 -0.0112532712 -0.011026355   -0.01067052 -0.002124739
+## Lag 4096  0.0002175683  0.024690048   -0.02199732  0.019639235
+## Lag 5120 -0.0233379084 -0.008498069   -0.02003264 -0.022915736
+##              gwidegree
+## Lag 0     1.0000000000
+## Lag 1024  0.0584582952
+## Lag 2048 -0.0002112205
+## Lag 3072 -0.0090114816
+## Lag 4096 -0.0135061043
+## Lag 5120 -0.0211166244
 ## 
 ## Sample statistics burn-in diagnostic (Geweke):
 ## Chain 1 
@@ -477,12 +491,12 @@ Bellow it is shown the MCM diagnostics, it seems well-mixed and with stationary 
 ## Fraction in 2nd window = 0.5 
 ## 
 ##         edges        mutual nodematch.gov        istar2     gwidegree 
-##      -0.04145      -0.04490       0.66493       0.18824      -0.14042 
+##       0.12778      -0.45316      -0.39710       0.28642      -0.01315 
 ## 
 ## Individual P-values (lower = worse):
 ##         edges        mutual nodematch.gov        istar2     gwidegree 
-##     0.9669375     0.9641838     0.5060935     0.8506890     0.8883275 
-## Joint P-value (lower = worse):  0.7508206 .
+##     0.8983269     0.6504361     0.6912923     0.7745529     0.9895095 
+## Joint P-value (lower = worse):  0.8791296 .
 \end{verbatim}
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-9-1} 
